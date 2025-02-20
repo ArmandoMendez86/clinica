@@ -1,0 +1,72 @@
+/* Contenedor principal */
+#odontograma {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  max-width: 650px;
+  margin: auto;
+  padding: 20px;
+  justify-content: center;
+}
+
+/* Estilo de los dientes */
+.diente {
+  width: 50px;
+  height: 60px;
+  background-color: #fff;
+  border: 3px solid #bbb;
+  border-radius: 20px 20px 40px 40px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 60px;
+  cursor: pointer;
+  position: relative;
+  box-shadow: inset 0px -5px 10px rgba(0, 0, 0, 0.1),
+    0px 5px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease, background-color 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.diente:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos de estados del diente */
+.diente.sano {
+  background-color: #fff;
+  border-color: #bbb;
+}
+
+.diente.caries {
+  background-color: #ffcc00;
+  border-color: #e6a700;
+  box-shadow: inset 0px -5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.diente.extraido {
+  background-color: #ccc;
+  border-color: #999;
+  box-shadow: inset 0px -5px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+}
+
+/* Estilo especial para dientes seleccionados */
+.diente.seleccionado {
+  background-color: red !important;
+  border-color: darkred !important;
+  box-shadow: inset 0px -5px 10px rgba(255, 0, 0, 0.5);
+}
+
+/* Pequeñas líneas en la parte inferior para simular raíz */
+.diente::after {
+  content: "";
+  width: 30px;
+  height: 10px;
+  background-color: inherit;
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+}

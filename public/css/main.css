@@ -1,0 +1,105 @@
+body {
+  background-color: #eaf2f8;
+  height: 100vh;
+}
+
+table {
+  text-transform: uppercase;
+}
+
+td {
+  font-size: smaller !important;
+  vertical-align: middle;
+}
+
+h1 {
+  color: #2e86c1;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background-color: lightblue !important;
+}
+
+.accordion-button {
+  background-color: #f2f3f4;
+  border: 3px dotted #2e86c1;
+}
+
+.accordion-button:focus,
+.accordion-button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.boton-sidebar {
+  position: fixed;
+  right: 3rem;
+  bottom: 3rem;
+}
+
+.btn-warning,
+.btn-danger,
+.btn-primary,
+.btn-secondary {
+  background-color: #fff;
+  color: #2e86c1;
+  border: none;
+}
+
+.swal2-confirm,
+.swal2-cancel {
+  background-color: #fff !important;
+  color: #2e86c1 !important;
+  border: none !important;
+}
+
+.nav-link,
+i {
+  color: #2e86c1 !important;
+}
+.nav-link.active {
+  background-color: #eaf2f8 !important;
+  color: #2e86c1 !important;
+}
+
+thead {
+  background-color: #20b2aab5 !important;
+  color: white;
+}
+
+div:where(.swal2-container).swal2-center > .swal2-popup {
+  background-color: rgb(145 145 145 / 91%);
+  border: 2px dotted white;
+  border-radius: 1rem;
+  color: white;
+}
+
+.activo {
+  background-color: rgb(234 242 248);
+  color: #fff;
+}
+
+.select2-selection {
+  height: 37px !important;
+}
+
+.contenedor-principal {
+  width: 85%;
+}
+
+.accordion-item {
+  border-bottom-left-radius: 1rem !important;
+  border-bottom-right-radius: 1rem !important;
+}
+
+#staticBackdropPago .modal-content {
+  background-color: rgb(145 145 145 / 91%);
+  color: #fff !important;
+}
+
+.boton-logout {
+  position: fixed;
+  top: 1rem;
+  right: 3rem;
+}
