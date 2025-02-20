@@ -24,7 +24,8 @@ class PacienteController
             $data['apellido'],
             $data['telefono'],
             $data['email'],
-            $data['direccion']
+            $data['direccion'],
+            $data['fecha_cumple'],
         );
         echo json_encode(["success" => $resultado]);
     }
@@ -38,7 +39,8 @@ class PacienteController
             $data['apellido'],
             $data['telefono'],
             $data['email'],
-            $data['direccion']
+            $data['direccion'],
+            $data['fecha_cumple'],
         );
         echo json_encode(["success" => $resultado]);
     }

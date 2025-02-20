@@ -34,8 +34,9 @@ h1 {
 
 .boton-sidebar {
   position: fixed;
-  right: 3rem;
+  left: 3rem;
   bottom: 3rem;
+  z-index: 10000 !important;
 }
 
 .btn-warning,

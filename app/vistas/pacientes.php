@@ -45,9 +45,13 @@ include_once "../incluir/auth.php";
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email">
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="direccion" class="form-label">Direccion</label>
                             <input type="text" class="form-control" id="direccion">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fecha_nacimiento" class="form-label">Fecha nacimiento</label>
+                            <input type="date" class="form-control" id="fecha_nacimiento">
                         </div>
                         <button type="submit" class="btn btn-primary w-auto">Guardar</button>
                     </form>
@@ -68,6 +72,7 @@ include_once "../incluir/auth.php";
                     <th>telefono</th>
                     <th>email</th>
                     <th>direccion</th>
+                    <th>Fecha nacimiento</th>
                     <th>acciones</th>
                 </tr>
             </thead>
@@ -104,9 +109,13 @@ include_once "../incluir/auth.php";
                             <label for="editarEmail" class="form-label">Email</label>
                             <input type="email" class="form-control" id="editarEmail">
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="editarDireccion" class="form-label">Direccion</label>
                             <input type="text" class="form-control" id="editarDireccion">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="editar_fecha_nacimiento" class="form-label">Fecha nacimiento</label>
+                            <input type="date" class="form-control" id="editar_fecha_nacimiento">
                         </div>
                 </div>
                 <div class="modal-footer">

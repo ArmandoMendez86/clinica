@@ -1,11 +1,12 @@
 class Paciente {
-  constructor(id, nombre, apellido, telefono, email, direccion) {
+  constructor(id, nombre, apellido, telefono, email, direccion, fecha_cumple) {
     this.id = id;
     this.nombre = nombre;
     this.apellido = apellido;
     this.telefono = telefono;
     this.email = email;
     this.direccion = direccion;
+    this.fecha_cumple = fecha_cumple;
   }
 
   async guardar() {

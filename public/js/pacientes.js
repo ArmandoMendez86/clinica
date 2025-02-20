@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
+console.log("listo....")
   const formPaciente = document.getElementById("formPaciente");
   const formEditarPaciente = document.getElementById("formEditarPaciente");
   const listaPacientes = document.getElementById("listaPacientes");
@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${paciente.telefono}</td>
         <td>${paciente.email}</td>
         <td>${paciente.direccion}</td>
+        <td>${paciente.fecha_cumple}</td>
         <td>
           <button id='editarCliente' type="button" class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <i class='fa fa-pencil'></i>
@@ -51,8 +52,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       formPaciente.apellido.value,
       formPaciente.telefono.value,
       formPaciente.email.value,
-      formPaciente.direccion.value
+      formPaciente.direccion.value,
+      formPaciente.fecha_nacimiento.value,
     );
+
 
     const respuesta = await nuevoPaciente.guardar();
     if (respuesta.success) {
@@ -86,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("#editarTelefono").value = rowData[3];
         document.querySelector("#editarEmail").value = rowData[4];
         document.querySelector("#editarDireccion").value = rowData[5];
+        document.querySelector("#editar_fecha_nacimiento").value = rowData[6];
       }
       if (btnEliminar) {
         let row = btnEliminar.closest("tr");
@@ -126,7 +130,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         formEditarPaciente.editarApellido.value,
         formEditarPaciente.editarTelefono.value,
         formEditarPaciente.editarEmail.value,
-        formEditarPaciente.editarDireccion.value
+        formEditarPaciente.editarDireccion.value,
+        formEditarPaciente.editar_fecha_nacimiento.value
       );
 
       const respuesta = await editarPaciente.editar();
