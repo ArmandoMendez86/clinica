@@ -48,9 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = new bootstrap.Modal(document.getElementById("modalEdicion"));
     modal.show();
 
-    // Guardar cambios cuando el usuario presiona "Guardar"
     document.getElementById("guardarEdicion").addEventListener("click", () => {
-      // Actualizar los datos del diente
       diente.estado = document.getElementById("estado").value;
       diente.tratamiento = document.getElementById("tratamiento").value;
       diente.fechaUltimoTratamiento = document.getElementById(
@@ -58,11 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
       ).value;
       diente.notas = document.getElementById("notas").value;
 
-      // Guardar los cambios en el objeto `odontograma` y volver a renderizar
       odontograma.marcarDiente(index, diente.estado);
       renderizarOdontograma(odontograma.dientes);
 
-      // Cerrar el modal
       modal.hide();
     });
   }
@@ -73,4 +69,33 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!odontograma) return;
       await odontograma.guardar();
     });
+
+  //------------------------------------ACTIVACION DE PAGINA-------------------------//
+
+  let pagina = window.location.pathname.split("/").pop();
+  if (pagina === "odontograma.php") {
+    document.querySelector("#odontogramas").setAttribute("checked", true);
+  }
+
+  document.querySelector("#menuBotoom").addEventListener("click", (e) => {
+    if (e.target.id == "pacientes") {
+      window.location.href = "pacientes.php";
+    } else if (e.target.id == "medicos") {
+      window.location.href = "medicos.php";
+    } else if (e.target.id == "citas") {
+      window.location.href = "citas.php";
+    } else if (e.target.id == "recetas") {
+      window.location.href = "recetas.php";
+    } else if (e.target.id == "odontogramas") {
+      window.location.href = "odontograma.php";
+    } else if (e.target.id == "historial") {
+      window.location.href = "historial.php";
+    } else if (e.target.id == "expediente") {
+      window.location.href = "expediente.php";
+    } else if (e.target.id == "pagos") {
+      window.location.href = "pagos.php";
+    } else if (e.target.id == "usuarios") {
+      window.location.href = "usuarios.php";
+    }
+  });
 });

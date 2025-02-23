@@ -1,98 +1,217 @@
-<div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdropCanvas" aria-labelledby="staticBackdropLabelCanva">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title fs-2" id="staticBackdropLabelCanva">Menu</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item" id="vistaPacientes">
-                <a class="nav-link" href="pacientes.php">
-                    <i class="fa fa-user fa-2x me-4" aria-hidden="true"></i>
-                    Pacientes
-                </a>
-            </li>
-            <li class="nav-item" id="vistaMedicos">
-                <a class="nav-link" href="medicos.php">
-                    <i class="fa fa-user-md fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Medicos
-                </a>
-            </li>
-            <li class="nav-item" id="vistaCitas">
-                <a class="nav-link" href="citas.php">
-                    <i class="fa fa-calendar fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Citas
-                </a>
-            </li>
-            <li class="nav-item" id="vistaRecetas">
-                <a class="nav-link" href="recetas.php">
-                    <i class="fa fa-file-text-o fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Recetas
-                </a>
-            </li>
-            <li class="nav-item" id="vistaOdontograma">
-                <a class="nav-link" href="odontograma.php">
-                    <i class="fa fa-stethoscope fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Odontogramas
-                </a>
-            </li>
-            <li class="nav-item" id="vistaHistorial">
-                <a class="nav-link" href="historial.php">
-                    <i class="fa fa-history fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Historial Medico
-                </a>
-            </li>
-            <li class="nav-item" id="vistaExpediente">
-                <a class="nav-link" href="expediente.php">
-                    <i class="fa fa-book fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Expediente Clinico
-                </a>
-            </li>
-            <li class="nav-item" id="vistaPagos">
-                <a class="nav-link" href="pagos.php">
-                    <i class="fa fa-credit-card fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Pagos
-                </a>
-            </li>
-            <li class="nav-item" id="vistaUsuarios">
-                <a class="nav-link" href="usuarios.php">
-                    <i class="fa fa-lock fa-2x" aria-hidden="true" style="width: 40px;"></i>
-                    Roles
-                </a>
-            </li>
-            <!--  <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </li> -->
-        </ul>
-    </div>
+<style>
+    .radio-input input {
+        display: none;
+    }
+
+    .radio-input {
+        width: 100px;
+        --container_height: 80vh;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 10px;
+        padding: 10px;
+        gap: var(--padding);
+        background-color: #fff;
+        color: #000000;
+        height: var(--container_height);
+        overflow: hidden;
+        border: 1px solid rgba(53, 52, 52, 0.226);
+    }
+
+    .radio-input label {
+        width: 80%;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        z-index: 1;
+        font-weight: 600;
+        font-size: 12px;
+        height: 50%;
+        color: #2e86c1;
+    }
+
+
+
+    .selection {
+        display: none;
+        position: absolute;
+        height: calc(var(--container_height) / 9 - 12px);
+        z-index: 0;
+        inset: 6px;
+        border-radius: 10px;
+        transition: 0.15s ease;
+    }
+
+    .radio-input label:has(input:checked) {
+        color: #fff;
+    }
+
+    .radio-input label:has(input:checked)~.selection {
+        display: inline-block;
+    }
+
+    .radio-input label:has(input:checked) svg {
+        stroke: white;
+        stroke-width: 10px;
+    }
+
+    .radio-input label:nth-child(1):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 0.1 / 9));
+        background-color: #52b3e5;
+        color: #FFF;
+    }
+
+    .radio-input label:nth-child(2):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 1.1 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(3):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 2.05 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(4):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 3 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(5):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 4 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(6):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 4.95 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(7):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 6 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(8):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 6.85 / 9));
+        background-color: #52b3e5;
+    }
+
+    .radio-input label:nth-child(9):has(input:checked)~.selection {
+        transform: translateY(calc(var(--container_height) * 7.85 / 9));
+        background-color: #52b3e5;
+    }
+</style>
+
+<!-- From Uiverse.io by Yaya12085 -->
+<div class="radio-input">
+    <label>
+        <input name="value-radio" type="radio" id="pacientes" />
+        <i class="fa fa-user fa-2x"></i>
+        <span>Paciente</span>
+    </label>
+    <label>
+        <input value="value-2" name="value-radio" type="radio" id="medicos" />
+        <i class="fa fa-user-md fa-2x"></i>
+        <span>Medico</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="citas" />
+        <i class="fa fa-calendar fa-2x"></i>
+        <span>Cita</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="recetas" />
+        <i class="fa fa-file-text-o fa-2x"></i>
+        <span>Receta</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="odontograma" />
+        <i class="fa fa-stethoscope fa-2x"></i>
+        <span>Odontograma</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="historial" />
+        <i class="fa fa-history fa-2x"></i>
+        <span>Historial</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="expediente" />
+        <i class="fa fa-book fa-2x"></i>
+        <span>Expediente</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="pagos" />
+        <i class="fa fa-credit-card fa-2x"></i>
+        <span>Pago</span>
+    </label>
+    <label>
+        <input value="value-3" name="value-radio" type="radio" id="rol" />
+        <i class="fa fa-lock fa-2x"></i>
+        <span>Rol</span>
+    </label>
+    <span class="selection"></span>
 </div>
 
+
+
 <script>
+    document.querySelector(".radio-input").addEventListener("click", (e) => {
+
+        if (e.target.id == "pacientes") {
+            window.location.href = "pacientes.php"
+        }
+        if (e.target.id == "medicos") {
+            window.location.href = "medicos.php"
+        }
+        if (e.target.id == "citas") {
+            window.location.href = "citas.php"
+        }
+        if (e.target.id == "recetas") {
+            window.location.href = "recetas.php"
+        }
+        if (e.target.id == "odontograma") {
+            window.location.href = "odontograma.php"
+        }
+        if (e.target.id == "historial") {
+            window.location.href = "historial.php"
+        }
+        if (e.target.id == "expediente") {
+            window.location.href = "expediente.php"
+        }
+        if (e.target.id == "pagos") {
+            window.location.href = "pagos.php"
+        }
+        if (e.target.id == "rol") {
+            window.location.href = "usuarios.php"
+        }
+    })
+
+
+
     let pagina = window.location.pathname.split("/").pop();
     if (pagina === "pacientes.php") {
-        document.querySelector("#vistaPacientes").classList.add("activo")
+        document.querySelector("#pacientes").setAttribute("checked", true)
     } else if (pagina === "citas.php") {
-        document.querySelector("#vistaCitas").classList.add("activo")
+        document.querySelector("#citas").setAttribute("checked", true)
     } else if (pagina === "historial.php") {
-        document.querySelector("#vistaHistorial").classList.add("activo")
+        document.querySelector("#historial").setAttribute("checked", true)
     } else if (pagina === "medicos.php") {
-        document.querySelector("#vistaMedicos").classList.add("activo")
+        document.querySelector("#medicos").setAttribute("checked", true)
     } else if (pagina === "odontograma.php") {
-        document.querySelector("#vistaOdontograma").classList.add("activo")
+        document.querySelector("#odontograma").setAttribute("checked", true)
     } else if (pagina === "expediente.php") {
-        document.querySelector("#vistaExpediente").classList.add("activo")
+        document.querySelector("#expediente").setAttribute("checked", true)
     } else if (pagina === "recetas.php") {
-        document.querySelector("#vistaRecetas").classList.add("activo")
+        document.querySelector("#recetas").setAttribute("checked", true)
     } else if (pagina === "pagos.php") {
-        document.querySelector("#vistaPagos").classList.add("activo")
+        document.querySelector("#pagos").setAttribute("checked", true)
+    } else if (pagina === "usuarios.php") {
+        document.querySelector("#rol").setAttribute("checked", true)
     }
 </script>

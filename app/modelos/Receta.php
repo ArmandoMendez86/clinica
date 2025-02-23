@@ -30,10 +30,17 @@ class Receta
     // Obtener todas las recetas
     public function obtenerTodas()
     {
-        $query = "SELECT p.nombre, p.apellido, p.telefono, d.nombre AS doctor, d.especialidad, r.medicamentos, r.dosis, r.indicaciones, h.diagnostico, r.fecha FROM recetas AS r
+        $query = "SELECT r.id, p.nombre, p.telefono, d.nombre AS doctor, d.especialidad, r.medicamentos, r.dosis, r.indicaciones, h.diagnostico, r.fecha FROM recetas AS r
         INNER JOIN pacientes AS p ON p.id = r.paciente_id
         INNER JOIN doctores AS d ON d.id = r.doctor_id
         INNER JOIN historial_medico AS h ON h.id = r.historial_id";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function eliminar($id)
+    {
+        $query = "DELETE FROM recetas WHERE id = ?";
+        $stmt = $this->db->prepare($query);
+        return $stmt->execute([$id]);
     }
 }

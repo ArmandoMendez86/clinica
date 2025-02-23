@@ -1,12 +1,16 @@
 class Paciente {
-  constructor(id, nombre, apellido, telefono, email, direccion, fecha_cumple) {
+  constructor(id, nombre, telefono, email, direccion, fecha_cumple, ocupacion, enfermedadesC, antecedentesP, alergias, medicacion) {
     this.id = id;
     this.nombre = nombre;
-    this.apellido = apellido;
     this.telefono = telefono;
     this.email = email;
     this.direccion = direccion;
     this.fecha_cumple = fecha_cumple;
+    this.ocupacion = ocupacion;
+    this.enfermedadesC = enfermedadesC;
+    this.antecedentesP = antecedentesP;
+    this.alergias = alergias;
+    this.medicacion = medicacion;
   }
 
   async guardar() {
@@ -62,10 +66,10 @@ class Paciente {
       errores.push("El nombre solo puede contener letras y espacios.");
     }
 
-    if (!/^[a-zA-Z\s]+$/.test(this.apellido)) {
+  /*   if (!/^[a-zA-Z\s]+$/.test(this.apellido)) {
       errores.push("El apellido solo puede contener letras y espacios.");
     }
-
+ */
     if (!/^\d{8,15}$/.test(this.telefono)) {
       errores.push("El teléfono debe contener entre 8 y 15 dígitos.");
     }

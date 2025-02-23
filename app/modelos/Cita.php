@@ -12,7 +12,7 @@ class Cita
 
     public function obtenerTodos()
     {
-        $query = "SELECT ct.id, p.id AS id_cliente, p.nombre, p.apellido, p.email, p.telefono, ct.fecha_hora, hm.id AS id_historial, hm.diagnostico AS motivo, ct.estado FROM citas AS ct
+        $query = "SELECT ct.id, p.id AS id_cliente, p.nombre, p.email, p.telefono, ct.fecha_hora, hm.id AS id_historial, hm.motivo, ct.estado FROM citas AS ct
         INNER JOIN pacientes AS p ON p.id = ct.id_paciente
         INNER JOIN historial_medico AS hm ON hm.id = ct.id_historial";
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);

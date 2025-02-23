@@ -21,11 +21,15 @@ class PacienteController
         $resultado = $this->modelo->agregar(
             $data['id'],
             $data['nombre'],
-            $data['apellido'],
             $data['telefono'],
             $data['email'],
             $data['direccion'],
             $data['fecha_cumple'],
+            $data['ocupacion'],
+            $data['enfermedadesC'],
+            $data['antecedentesP'],
+            $data['alergias'],
+            $data['medicacion'],
         );
         echo json_encode(["success" => $resultado]);
     }
@@ -36,11 +40,15 @@ class PacienteController
         $resultado = $this->modelo->editar(
             $data['id'],
             $data['nombre'],
-            $data['apellido'],
             $data['telefono'],
             $data['email'],
             $data['direccion'],
             $data['fecha_cumple'],
+            $data['ocupacion'],
+            $data['enfermedadesC'],
+            $data['antecedentesP'],
+            $data['alergias'],
+            $data['medicacion'],
         );
         echo json_encode(["success" => $resultado]);
     }

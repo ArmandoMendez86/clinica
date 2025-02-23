@@ -35,8 +35,8 @@ h1 {
 .boton-sidebar {
   position: fixed;
   left: 3rem;
-  bottom: 3rem;
-  z-index: 10000 !important;
+  top: 1rem;
+  
 }
 
 .btn-warning,
@@ -55,10 +55,10 @@ h1 {
   border: none !important;
 }
 
-.nav-link,
+/* .nav-link,
 i {
-  color: #2e86c1 !important;
-}
+  color: #FFF !important;
+} */
 .nav-link.active {
   background-color: #eaf2f8 !important;
   color: #2e86c1 !important;

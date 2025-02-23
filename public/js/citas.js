@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  //-------------------------------------VARIABLES-------------------------------------//
   const formCita = document.getElementById("formCita");
   const formEditarCita = document.getElementById("formEditarCita");
   const listaCitas = document.getElementById("listaCitas");
@@ -6,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const errorPagoContainer = document.getElementById("errorPagoContainer");
   $(".misPacientes").select2();
 
+  //-------------------------------------CARGANDO TABLA CITAS-------------------------------------//
   async function cargarCitas() {
     $(".tabCitas").DataTable().destroy();
     listaCitas.innerHTML = "";
@@ -18,14 +20,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${cita.id}</td>
         <td>${cita.id_cliente}</td>
         <td>${cita.nombre}</td>
-        <td>${cita.apellido}</td>
         <td>${cita.email}</td>
         <td>${cita.telefono}</td>
         <td>${cita.fecha_hora}</td>
         <td>${cita.id_historial}</td>
         <td>${cita.motivo}</td>
         <td>${cita.estado}</td>
-        <td>
+        <td class="d-flex justify-content-center gap-2">
           <button id='editarCita' type="button" class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <i class='fa fa-pencil'></i>
           </button>
@@ -38,15 +39,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     listaCitas.innerHTML = plantilla;
     $(".tabCitas").DataTable({
-      columnDefs: [
-        { targets: [0, 1, 7], visible: false }, // Oculta la columna 0 y 2
-      ],
+      columnDefs: [{ targets: [0, 1, 6], visible: false }],
       language: {
         url: "../../public/js/mx.json",
       },
     });
   }
 
+  //-------------------------------------AGREGAR CITA-------------------------------------//
   formCita.addEventListener("submit", async (event) => {
     event.preventDefault();
     errorCitaContainer.innerHTML = "";
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (respuesta.success) {
       alert("Cita guardada correctamente");
       formCita.reset();
+      $(".misPacientes").val(null).trigger("change");
       cargarCitas();
     } else {
       respuesta.errores.forEach((error) => {
@@ -76,6 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  //-------------------------------------EDITAR Y ELIMINAR CITAS-------------------------------------//
   document.querySelector(".tabCitas").addEventListener("click", async (e) => {
     btnEditar = e.target.closest(".btn-warning");
     btnEliminar = e.target.closest(".btn-danger");
@@ -95,19 +97,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       document.querySelector("#idEditarCita").value = rowData[0];
       document.querySelector("#editarIdPaciente").value = rowData[1];
-      document.querySelector("#editarFechaHora").value = rowData[6];
-      document.querySelector("#editarEstado").value = rowData[9];
+      document.querySelector("#editarFechaHora").value = rowData[5];
+      document.querySelector("#editarEstado").value = rowData[8];
       await cargarEditarHistorialPaciente(
         document.querySelector("#editarIdPaciente").value,
         "editarMotivo"
       );
-      document.querySelector("#editarMotivo").value = rowData[7];
+      document.querySelector("#editarMotivo").value = rowData[6];
+
+      console.log(document.querySelector("#editarEstado").value);
 
       if (document.querySelector("#editarEstado").value == "completada") {
         document.querySelector("#editarEstado").setAttribute("disabled", true);
-        document
-          .querySelector("#editarFechaHora")
-          .setAttribute("disabled", true);
+        document.querySelector("#editarFechaHora").setAttribute("disabled", true);
       } else {
         document.querySelector("#editarEstado").removeAttribute("disabled");
         document.querySelector("#editarFechaHora").removeAttribute("disabled");
@@ -143,6 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  //-------------------------------------CARGAR LISTA PACIENTES-------------------------------------//
   async function cargarPacientes() {
     const selectPacientes = document.getElementById("id_paciente");
     selectPacientes.innerHTML =
@@ -151,12 +154,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     pacientes.forEach((paciente) => {
       const option = document.createElement("option");
       option.value = paciente.id;
-      option.textContent = `${paciente.nombre} ${paciente.apellido}`;
+      option.textContent = `${paciente.nombre} - ${paciente.telefono}`;
       selectPacientes.appendChild(option);
     });
     return pacientes;
   }
 
+  //-------------------------------------CARGAR HISTORIAL CLINICO DEL PACIENTE-------------------------------------//
   async function cargarHistorialPaciente(id_paciente, selector) {
     const selectHistorialMedico = document.getElementById(selector);
     selectHistorialMedico.innerHTML =
@@ -167,7 +171,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     historialPaciente.forEach((historial) => {
       const option = document.createElement("option");
       option.value = historial.id;
-      option.textContent = `${historial.diagnostico} - ${historial.tratamiento}`;
+      option.textContent = `Motivo: ${historial.motivo} - Tratamiento: ${historial.diagnostico}`;
       selectHistorialMedico.appendChild(option);
     });
     return historialPaciente;
@@ -189,6 +193,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return historialPaciente;
   }
 
+  //-------------------------------------EDITANDO CITA-------------------------------------//
   document
     .querySelector("#formEditarCita")
     .addEventListener("submit", async (e) => {
@@ -212,6 +217,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
+  //-------------------------------------CAMBIOS DE ESTADO-------------------------------------//
   $("#id_paciente").on("change", function () {
     const id_paciente = $(this).val();
     if (!id_paciente) return;
@@ -225,6 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#staticBackdropPago").modal("show");
   });
 
+  //-------------------------------------ENVIANDO PAGO-------------------------------------//
   document.querySelector("#formPago").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -271,9 +278,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
+  //-------------------------------------CANCELANDO PAGO-------------------------------------//
   document.querySelector("#cancelarPago").addEventListener("click", () => {
     $("#staticBackdrop").modal("hide");
   });
+
+  //-------------------------------------CERRANDO MODALES-------------------------------------//
 
   document.addEventListener("hidden.bs.modal", function (event) {
     if (event.target.id === "staticBackdrop") {
@@ -282,8 +292,114 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (event.target.id === "staticBackdropPago") {
       document.querySelector('input[id^="dt-search"]').focus();
     }
+    if (event.target.id === "staticBackdropNuevoPaciente") {
+      document.querySelector('input[id^="dt-search"]').focus();
+      document.querySelector("#formPaciente").reset();
+      document.querySelector("#errorContainer").innerHTML = "";
+    }
   });
 
-  cargarCitas();
-  cargarPacientes();
+  /* Controles para nuevos pacientes */
+
+  //-------------------------------------NUEVO PACIENTE-------------------------------------//
+  document
+    .querySelector("#formPaciente")
+    .addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const nuevoPaciente = new Paciente(
+        null,
+        formPaciente.nombre.value,
+        formPaciente.telefono.value,
+        formPaciente.email.value,
+        formPaciente.direccion.value,
+        formPaciente.fecha_cumple.value,
+        formPaciente.ocupacion.value,
+        formPaciente.enfermedades_c.value,
+        formPaciente.antecedentes_p.value,
+        formPaciente.alergias.value,
+        formPaciente.medicacion.value
+      );
+
+      const respuesta = await nuevoPaciente.guardar();
+      if (respuesta.success) {
+        alert("Paciente guardado correctamente");
+        document.querySelector("#formPaciente").reset();
+        $("#staticBackdropNuevoPaciente").modal("hide");
+        await cargarPacientes();
+        document.querySelector("#errorContainer").innerHTML = "";
+      } else {
+        document.querySelector("#errorContainer").innerHTML = "";
+        respuesta.errores.forEach((error) => {
+          const p = document.createElement("p");
+          p.textContent = error;
+          p.style.color = "#FFF";
+          p.style.backgroundColor = "red";
+          document.querySelector("#errorContainer").appendChild(p);
+        });
+      }
+    });
+
+  //-------------------------------------DATOS INICIALES-------------------------------------//
+
+  await cargarCitas();
+  await cargarPacientes();
+  //-------------------------------------AGREGANDO HISTORIAL-------------------------------------//
+
+  document
+    .querySelector("#registrarNuevoHistorial")
+    .addEventListener("click", () => {
+      document.querySelector("#historialPara").style.backgroundColor =
+        "#a5e1df";
+      document.querySelector("#historialPara").style.color = "#a39191";
+      document.querySelector("#historialPara").style.padding = "0.5rem";
+      document.querySelector("#historialPara").style.borderRadius = "0.5rem";
+
+      document.querySelector("#historialPara").textContent = $(
+        ".misPacientes option:selected"
+      ).text();
+      console.log($(".misPacientes option:selected").text());
+    });
+
+  document
+    .getElementById("historialForm")
+    .addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      let id = null;
+      const id_paciente = $("#id_paciente").val();
+      const motivo = document.getElementById("motivo").value;
+      const diagnostico = document.getElementById("diagnostico").value;
+      const tratamiento = document.getElementById("tratamiento").value;
+      const notas = document.getElementById("notas").value;
+
+      const nuevoHistorial = new HistorialMedico(
+        id,
+        id_paciente,
+        motivo,
+        diagnostico,
+        tratamiento,
+        notas
+      );
+
+      const respuesta = await nuevoHistorial.guardar();
+      if (respuesta.success) {
+        alert("Historial médico guardado con éxito.");
+        document.querySelector("#historialForm").reset();
+        document.querySelector("#idHistorial").innerHTML = "";
+        $(".misPacientes").val(null).trigger("change");
+        document.querySelector("#errorHistorialContainer").innerHTML = "";
+        $("#staticBackdropNuevoHistorial").modal("hide");
+        /*  await cargarHistorialPaciente(id_paciente, "idHistorial"); */
+      } else {
+        document.querySelector("#errorHistorialContainer").innerHTML = "";
+        respuesta.errores.forEach((error) => {
+          const p = document.createElement("p");
+          p.textContent = error;
+          p.style.color = "#fff";
+          p.style.backgroundColor = "red";
+          document.querySelector("#errorHistorialContainer").appendChild(p);
+        });
+      }
+    });
 });

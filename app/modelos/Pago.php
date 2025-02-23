@@ -12,7 +12,7 @@ class Pago
 
     public function obtenerTodos()
     {
-        $query = "SELECT pg.id, p.nombre, p.apellido, h.diagnostico, h.tratamiento, h.notas, pg.monto, pg.fecha_pago, pg.metodo_pago FROM pagos AS pg
+        $query = "SELECT pg.id, p.nombre, h.diagnostico, h.tratamiento, h.notas, pg.monto, pg.fecha_pago, pg.metodo_pago FROM pagos AS pg
         INNER JOIN citas AS ct ON ct.id = pg.cita_id
         INNER JOIN pacientes AS p ON p.id = ct.id_paciente 
         INNER JOIN historial_medico AS h ON h.id = ct.id_historial ";

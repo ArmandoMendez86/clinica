@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-console.log("listo....")
   const formPaciente = document.getElementById("formPaciente");
   const formEditarPaciente = document.getElementById("formEditarPaciente");
   const listaPacientes = document.getElementById("listaPacientes");
@@ -16,11 +15,16 @@ console.log("listo....")
       <tr>
         <td>${paciente.id}</td>
         <td>${paciente.nombre}</td>
-        <td>${paciente.apellido}</td>
         <td>${paciente.telefono}</td>
         <td>${paciente.email}</td>
         <td>${paciente.direccion}</td>
+        <td>${paciente.fecha_registro}</td>
         <td>${paciente.fecha_cumple}</td>
+        <td>${paciente.ocupacion}</td>
+        <td>${paciente.enfermedades_c}</td>
+        <td>${paciente.antecedentes_p}</td>
+        <td>${paciente.alergias}</td>
+        <td>${paciente.medicacion}</td>
         <td>
           <button id='editarCliente' type="button" class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <i class='fa fa-pencil'></i>
@@ -35,7 +39,7 @@ console.log("listo....")
     listaPacientes.innerHTML = plantilla;
     $(".tabPacientes").DataTable({
       columnDefs: [
-        { targets: [0], visible: false } // Oculta la columna 0 y 2
+        { targets: [0, 3, 4, 6], visible: false }, // Oculta la columna 0 y 2
       ],
       language: {
         url: "../../public/js/mx.json",
@@ -47,15 +51,18 @@ console.log("listo....")
     event.preventDefault();
 
     const nuevoPaciente = new Paciente(
-      (formPaciente.idPaciente.value = null),
+      null,
       formPaciente.nombre.value,
-      formPaciente.apellido.value,
       formPaciente.telefono.value,
       formPaciente.email.value,
       formPaciente.direccion.value,
-      formPaciente.fecha_nacimiento.value,
+      formPaciente.fecha_cumple.value,
+      formPaciente.ocupacion.value,
+      formPaciente.enfermedades_c.value,
+      formPaciente.antecedentes_p.value,
+      formPaciente.alergias.value,
+      formPaciente.medicacion.value
     );
-
 
     const respuesta = await nuevoPaciente.guardar();
     if (respuesta.success) {
@@ -78,18 +85,22 @@ console.log("listo....")
   document
     .querySelector(".tabPacientes")
     .addEventListener("click", async (e) => {
-      btnEditar = e.target.closest(".btn-warning");
-      btnEliminar = e.target.closest(".btn-danger");
+      let btnEditar = e.target.closest(".btn-warning");
+      let btnEliminar = e.target.closest(".btn-danger");
       if (btnEditar) {
         let row = btnEditar.closest("tr");
         let rowData = $(".tabPacientes").DataTable().row(row).data();
         document.querySelector("#idEditarPaciente").value = rowData[0];
         document.querySelector("#editarNombre").value = rowData[1];
-        document.querySelector("#editarApellido").value = rowData[2];
-        document.querySelector("#editarTelefono").value = rowData[3];
-        document.querySelector("#editarEmail").value = rowData[4];
-        document.querySelector("#editarDireccion").value = rowData[5];
-        document.querySelector("#editar_fecha_nacimiento").value = rowData[6];
+        document.querySelector("#editarTelefono").value = rowData[2];
+        document.querySelector("#editarEmail").value = rowData[3];
+        document.querySelector("#editarDireccion").value = rowData[4];
+        document.querySelector("#editar_fecha_cumple").value = rowData[6];
+        document.querySelector("#editarOcupacion").value = rowData[7];
+        document.querySelector("#editarEnfermedades_c").value = rowData[8];
+        document.querySelector("#editarAntecedentes_p").value = rowData[9];
+        document.querySelector("#editarAlergias").value = rowData[10];
+        document.querySelector("#editarMedicacion").value = rowData[11];
       }
       if (btnEliminar) {
         let row = btnEliminar.closest("tr");
@@ -127,11 +138,15 @@ console.log("listo....")
       const editarPaciente = new Paciente(
         formEditarPaciente.idEditarPaciente.value,
         formEditarPaciente.editarNombre.value,
-        formEditarPaciente.editarApellido.value,
         formEditarPaciente.editarTelefono.value,
         formEditarPaciente.editarEmail.value,
         formEditarPaciente.editarDireccion.value,
-        formEditarPaciente.editar_fecha_nacimiento.value
+        formEditarPaciente.editar_fecha_cumple.value,
+        formEditarPaciente.editarOcupacion.value,
+        formEditarPaciente.editarEnfermedades_c.value,
+        formEditarPaciente.editarAntecedentes_p.value,
+        formEditarPaciente.editarAlergias.value,
+        formEditarPaciente.editarMedicacion.value
       );
 
       const respuesta = await editarPaciente.editar();

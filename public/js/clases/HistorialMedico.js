@@ -1,7 +1,8 @@
 class HistorialMedico {
-  constructor(id, id_paciente, diagnostico, tratamiento, notas = "") {
+  constructor(id, id_paciente, motivo, diagnostico, tratamiento, notas) {
     this.id = id;
     this.id_paciente = id_paciente;
+    this.motivo = motivo;
     this.diagnostico = diagnostico;
     this.tratamiento = tratamiento;
     this.notas = notas;
@@ -70,14 +71,15 @@ class HistorialMedico {
   validar() {
     const errores = [];
 
+    if (!this.id_paciente) {
+      errores.push("Debes seleccionar un paciente.");
+    }
+    if (!this.motivo.trim()) {
+      errores.push("El motivo es obligatorio.");
+    }
     if (!this.diagnostico.trim()) {
       errores.push("El diagnóstico es obligatorio.");
     }
-
-    if (!this.tratamiento.trim()) {
-      errores.push("El tratamiento es obligatorio.");
-    }
-
     return errores;
   }
 }

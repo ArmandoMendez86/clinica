@@ -40,12 +40,12 @@ class PagoController
         echo json_encode(["success" => $resultado]);
     } */
 
-  /*   public function eliminar()
+    public function eliminar()
     {
         $id = json_decode(file_get_contents("php://input"), true);
         $resultado = $this->modelo->eliminar($id);
         echo json_encode(["success" => $resultado]);
-    } */
+    }
 }
 
 // Manejo de peticiones
@@ -57,5 +57,5 @@ if ($action == "listar") {
 } elseif ($action == "guardar") {
     $controller->guardar();
 } elseif ($action == "eliminar") {
-    /* $controller->eliminar(); */
+    $controller->eliminar();
 }

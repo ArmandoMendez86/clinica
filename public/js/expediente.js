@@ -31,14 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#tablaHistorial").DataTable({
       columnDefs: [
         { targets: [0, 1], visible: false },
-        { targets: [2, 3, 4, 8], className: "text-center" },
+        { targets: [2, 3, 4], className: "text-center" },
       ],
       language: {
         url: "../../public/js/mx.json",
       },
     });
     $("#tablaRecetas").DataTable({
-      columnDefs: [{ targets: [0, 1, 2, 4, 9], className: "text-center" }],
+      columnDefs: [{ targets: [0, 1, 2], className: "text-center" }],
       language: {
         url: "../../public/js/mx.json",
       },
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#tablaCitas").DataTable({
       columnDefs: [
         { targets: [0, 1], visible: false },
-        { targets: [2, 3, 4, 5, 6, 7], className: "text-center" },
+        { targets: [2, 3, 4, 5, 6], className: "text-center" },
       ],
       language: {
         url: "../../public/js/mx.json",
@@ -106,4 +106,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const modal = new bootstrap.Modal(document.getElementById("modalEdicion"));
     modal.show();
   }
+
+
+  //------------------------------------ACTIVACION DE PAGINA-------------------------//
+
+  let pagina = window.location.pathname.split("/").pop();
+  if (pagina === "expediente.php") {
+    document.querySelector("#expediente").setAttribute("checked", true);
+  }
+
+  document.querySelector("#menuBotoom").addEventListener("click", (e) => {
+    if (e.target.id == "pacientes") {
+      window.location.href = "pacientes.php";
+    } else if (e.target.id == "medicos") {
+      window.location.href = "medicos.php";
+    } else if (e.target.id == "citas") {
+      window.location.href = "citas.php";
+    } else if (e.target.id == "recetas") {
+      window.location.href = "recetas.php";
+    } else if (e.target.id == "odontogramas") {
+      window.location.href = "odontograma.php";
+    } else if (e.target.id == "historial") {
+      window.location.href = "historial.php";
+    } else if (e.target.id == "expediente") {
+      window.location.href = "expediente.php";
+    } else if (e.target.id == "pagos") {
+      window.location.href = "pagos.php";
+    } else if (e.target.id == "usuarios") {
+      window.location.href = "usuarios.php";
+    }
+  });
+
+
+
+
 });

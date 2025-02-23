@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   let tooltipTriggerList = document.querySelectorAll(
     '[data-bs-toggle="tooltip"]'
   );
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pacientes.forEach((paciente) => {
       const option = document.createElement("option");
       option.value = paciente.id;
-      option.textContent = `${paciente.nombre} ${paciente.apellido}`;
+      option.textContent = `${paciente.nombre}`;
       selectPaciente.appendChild(option);
     });
   }
@@ -44,9 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
     diagnosticos.forEach((registro) => {
       const option = document.createElement("option");
       option.value = registro.id;
-      option.textContent = `${registro.diagnostico}`;
+      option.textContent = `${registro.motivo}`;
       selectDiagnostico.appendChild(option);
     });
+
+    return diagnosticos;
   }
 
   async function cargarTabRecetas() {
@@ -58,19 +60,22 @@ document.addEventListener("DOMContentLoaded", () => {
     recetas.forEach((receta) => {
       plantilla += `
         <tr>
+          <td>${receta.id}</td>
           <td>${receta.nombre}</td>
-          <td>${receta.apellido}</td>
           <td>${receta.telefono}</td>
           <td>${receta.doctor}</td>
           <td>${receta.especialidad}</td>
+          <td>${receta.diagnostico}</td>
           <td>${receta.medicamentos}</td>
           <td>${receta.dosis}</td>
           <td>${receta.indicaciones}</td>
-          <td>${receta.diagnostico}</td>
           <td>${receta.fecha}</td>
-          <td class="d-flex justify-content-center">
-            <button id='generarReceta' type="button" class='btn btn-warning' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-title='Imprimir Receta'>
-            <i class="fa fa-file-text" aria-hidden="true"></i>
+          <td class="d-flex justify-content-center gap-2">
+            <button id='generarReceta' type="button" class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              <i class="fa fa-file-text" aria-hidden="true"></i>
+            </button>
+            <button class='btn btn-danger'>
+              <i class='fa fa-times'></i>
             </button>
           </td>
         </tr>`;
@@ -78,22 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     listaRecetas.innerHTML = plantilla;
     $(".tabRecetas").DataTable({
-      columnDefs: [
-        { targets: [2, 5, 6, 7], visible: false }, // Oculta la columna 0 y 2
-      ],
+      columnDefs: [{ targets: [0], visible: false }],
       language: {
         url: "../../public/js/mx.json",
       },
     });
 
-    // 🔥 Reinicializa tooltips después de cargar la tabla
     let newTooltipTriggerList = document.querySelectorAll(
       '[data-bs-toggle="tooltip"]'
     );
     newTooltipTriggerList.forEach((el) => new bootstrap.Tooltip(el));
   }
 
-  // Guardar receta
   document
     .getElementById("formReceta")
     .addEventListener("submit", async (e) => {
@@ -109,8 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
         formReceta.indicaciones.value,
         formReceta.diagnostico.value
       );
-
-    
 
       const respuesta = await nuevaReceta.guardar();
       if (respuesta.success) {
@@ -132,10 +131,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  $(".pacientes").on("change", function () {
+  $(".pacientes").on("change", async function () {
     var id_paciente = $(this).val();
     if (!id_paciente) return;
-    cargarDiagnosticos(id_paciente);
+    const resultado = await cargarDiagnosticos(id_paciente);
+
+    document.querySelector(".badge").classList.remove("d-none");
+    document.querySelector("#numDiagnostico").textContent = resultado.length;
   });
 
   /*   document.querySelector("#paciente").addEventListener("change", (e) => {
@@ -144,6 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelector(".tabRecetas").addEventListener("click", async (e) => {
     const generarReceta = e.target.closest(".btn-warning");
+    const eliminarReceta = e.target.closest(".btn-danger");
     if (generarReceta) {
       const row = e.target.closest("tr");
       let rowData = $(".tabRecetas").DataTable().row(row).data();
@@ -183,8 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
-      doc.text(`Nombre: ${rowData[0]} ${rowData[1]}`, 15, 70);
-      doc.text(`Diagnóstico: ${rowData[8]}`, 15, 80);
+      doc.text(`Nombre: ${rowData[1]}`, 15, 70);
+      doc.text(`Motivo: ${rowData[5]}`, 15, 80);
 
       // Sección de Medicamentos
       doc.setFontSize(14);
@@ -263,8 +266,50 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       doc.text("Firma del Médico", 135, startY + adjustedHeight + 50);
 
-      // Guardar PDF
-      doc.save(`Receta_${rowData[0]}.pdf`);
+      // Convertir el PDF a Blob
+      const pdfBlob = doc.output("blob");
+
+      // Crear un objeto URL
+      const pdfURL = URL.createObjectURL(pdfBlob);
+
+      // Mostrar el PDF en un iframe
+      const iframe = document.createElement("iframe");
+      iframe.style.width = "100%";
+      iframe.style.height = "600px";
+      iframe.src = pdfURL;
+
+      // Insertar el iframe en el DOM
+      const contenedor = document.getElementById("pdf-container");
+      contenedor.innerHTML = "";
+      contenedor.appendChild(iframe);
+    }
+
+    if (eliminarReceta) {
+      let row = eliminarReceta.closest("tr");
+      let rowData = $(".tabRecetas").DataTable().row(row).data();
+
+      Swal.fire({
+        title: "Quiere eliminar?",
+        text: "Esto no se podra revertir!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: "No",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Eliminado!",
+            text: "Registro de paciente eliminado.",
+            icon: "success",
+          });
+
+          const eliminarReceta = new Receta(rowData[0]);
+          await eliminarReceta.eliminar();
+          await cargarTabRecetas();
+        }
+      });
     }
   });
 
@@ -285,8 +330,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  cargarPacientes();
-  cargarMedicos();
-  cargarDiagnosticos();
-  cargarTabRecetas();
+  await cargarPacientes();
+  await cargarMedicos();
+  await cargarDiagnosticos();
+  await cargarTabRecetas();
 });

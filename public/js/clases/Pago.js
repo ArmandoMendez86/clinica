@@ -53,17 +53,17 @@ class Pago {
     );
 
     return await respuesta.json();
-  }
+  } */
 
   async eliminar() {
     const respuesta = await fetch(
-      "../../app/controladores/CitaController.php?action=eliminar",
+      "../../app/controladores/PagoController.php?action=eliminar",
       {
         method: "POST",
-        body: JSON.stringify(this.idCita),
+        body: JSON.stringify(this.idPago),
         headers: { "Content-Type": "application/json" },
       }
     );
     return await respuesta.json();
-  } */
+  }
 }

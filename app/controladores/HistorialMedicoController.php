@@ -30,10 +30,12 @@ class HistorialMedicoController
         $data = json_decode(file_get_contents("php://input"), true);
         if ($data) {
             $resultado = $this->modelo->agregar(
+                $data['id'],
                 $data['id_paciente'],
+                $data['motivo'],
                 $data['diagnostico'],
                 $data['tratamiento'],
-                $data['notas'] ?? null
+                $data['notas']
             );
             echo json_encode(["success" => $resultado]);
         } else {
@@ -47,9 +49,10 @@ class HistorialMedicoController
         if ($data) {
             $resultado = $this->modelo->editar(
                 $data['id'],
+                $data['motivo'],
                 $data['diagnostico'],
                 $data['tratamiento'],
-                $data['notas'] ?? null,
+                $data['notas'],
             );
             echo json_encode(["success" => $resultado]);
         } else {

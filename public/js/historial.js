@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     pacientes.forEach((paciente) => {
       const option = document.createElement("option");
       option.value = paciente.id;
-      option.textContent = `${paciente.nombre} ${paciente.apellido}`;
+      option.textContent = `${paciente.nombre}`;
       pacienteSelect.appendChild(option);
     });
   }
@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     $(".tabHistorial").DataTable().destroy();
     listaHistorial.innerHTML = "";
     const historiales = await HistorialMedico.obtenerHistoriales();
-
     let plantilla = ``;
 
     historiales.forEach((historial) => {
@@ -33,13 +32,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         <td>${historial.id}</td>
         <td>${historial.id_paciente}</td>
         <td>${historial.nombre}</td>
-        <td>${historial.apellido}</td>
         <td>${historial.telefono}</td>
+        <td>${historial.motivo}</td>
         <td>${historial.diagnostico}</td>
         <td>${historial.tratamiento}</td>
         <td>${historial.notas}</td>
         <td>${historial.fecha}</td>
-        <td>
+        <td class="d-flex justify-content-center gap-2">
           <button id='editarCliente' type="button" class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <i class='fa fa-pencil'></i>
           </button>
@@ -55,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       columnDefs: [
         { targets: [0, 1], visible: false }, // Oculta la columna 0 y 2
       ],
+      order: [[8, "desc"]],
       language: {
         url: "../../public/js/mx.json",
       },
@@ -64,41 +64,98 @@ document.addEventListener("DOMContentLoaded", async function () {
   document
     .getElementById("historialForm")
     .addEventListener("submit", async function (event) {
-      event.preventDefault(); // Evitar recarga de la página
+      event.preventDefault();
 
-      const id_paciente = document.getElementById("pacienteSelect").value;
-      const diagnostico = document.getElementById("diagnostico").value;
-      const tratamiento = document.getElementById("tratamiento").value;
-      const notas = document.getElementById("notas").value;
+      /* let nuevoPaciente = document.getElementById("nuevo-paciente"); */
 
-      if (!id_paciente) {
-        alert("Seleccione un paciente.");
-        return;
-      }
+      /* Logica para cliente existente */
+      if (nuevoPaciente.classList.contains("d-none")) {
+        let id = null;
+        const id_paciente = document.getElementById("pacienteSelect").value;
+        const motivo = document.getElementById("motivo").value;
+        const diagnostico = document.getElementById("diagnostico").value;
+        const tratamiento = document.getElementById("tratamiento").value;
+        const notas = document.getElementById("notas").value;
 
-      const nuevoHistorial = new HistorialMedico(
-        null,
-        id_paciente,
-        diagnostico,
-        tratamiento,
-        notas
-      );
+        const nuevoHistorial = new HistorialMedico(
+          id,
+          id_paciente,
+          motivo,
+          diagnostico,
+          tratamiento,
+          notas
+        );
 
-      const respuesta = await nuevoHistorial.guardar();
-      if (respuesta.success) {
-        alert("Historial médico guardado con éxito.");
-        formHistorial.reset();
-        cargarHistoriales()
-        document.querySelector("#errorContainer").innerHTML = "";
+        const respuesta = await nuevoHistorial.guardar();
+        if (respuesta.success) {
+          alert("Historial médico guardado con éxito.");
+          formHistorial.reset();
+          cargarHistoriales();
+          $(".pacientes").val(null).trigger("change");
+          document.querySelector("#errorContainer").innerHTML = "";
+          document.querySelector(".card").classList.add("d-none");
+        } else {
+          document.querySelector("#errorContainer").innerHTML = "";
+          respuesta.errores.forEach((error) => {
+            const p = document.createElement("p");
+            p.textContent = error;
+            p.style.color = "#fff";
+            p.style.backgroundColor = "red";
+            errorContainer.appendChild(p);
+          });
+        }
       } else {
-        document.querySelector("#errorContainer").innerHTML = "";
-        respuesta.errores.forEach((error) => {
-          const p = document.createElement("p");
-          p.textContent = error;
-          p.style.color = "#fff";
-          p.style.backgroundColor = "red";
-          errorContainer.appendChild(p);
-        });
+        /* Logica para cliente nuevo */
+        const nuevoPaciente = new Paciente(
+          null,
+          document.querySelector("#nombre").value,
+          document.querySelector("#telefono").value,
+          null,
+          null,
+          document.querySelector("#fecha_nac").value,
+          document.querySelector("#ocupacion").value,
+          document.querySelector("#enfermedadesC").value,
+          document.querySelector("#antecedentesP").value,
+          document.querySelector("#alergias").value,
+          document.querySelector("#medicacion").value
+        );
+
+        const respuestaPaciente = await nuevoPaciente.guardar();
+        const idPaciente = respuestaPaciente.success;
+
+        let id = null;
+        const motivo = document.getElementById("motivo").value;
+        const diagnostico = document.getElementById("diagnostico").value;
+        const tratamiento = document.getElementById("tratamiento").value;
+        const notas = document.getElementById("notas").value;
+
+        const nuevoHistorial = new HistorialMedico(
+          id,
+          idPaciente,
+          motivo,
+          diagnostico,
+          tratamiento,
+          notas
+        );
+
+        const respuestaHistorial = await nuevoHistorial.guardar();
+        if (respuestaHistorial.success) {
+          alert("Historial médico guardado con éxito.");
+          formHistorial.reset();
+          cargarHistoriales();
+          $(".pacientes").val(null).trigger("change");
+          document.querySelector("#errorContainer").innerHTML = "";
+          document.querySelector(".card").classList.add("d-none");
+        } else {
+          document.querySelector("#errorContainer").innerHTML = "";
+          respuestaHistorial.errores.forEach((error) => {
+            const p = document.createElement("p");
+            p.textContent = error;
+            p.style.color = "#fff";
+            p.style.backgroundColor = "red";
+            errorContainer.appendChild(p);
+          });
+        }
       }
     });
 
@@ -112,9 +169,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         let rowData = $(".tabHistorial").DataTable().row(row).data();
 
         document.querySelector("#idEditarHistorial").value = rowData[0];
-        document.querySelector(
-          "#paciente"
-        ).value = `${rowData[2]} ${rowData[3]}`;
+        document.querySelector("#paciente").value = `${rowData[2]}`;
+        document.querySelector("#editarMotivo").value = rowData[4];
         document.querySelector("#editarDiagnostico").value = rowData[5];
         document.querySelector("#editarTratamiento").value = rowData[6];
         document.querySelector("#editarNota").value = rowData[7];
@@ -154,7 +210,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       e.preventDefault();
       const editarHistorial = new HistorialMedico(
         formEditarHistorial.idEditarHistorial.value,
-        formEditarHistorial.paciente.value,
+        null,
+        formEditarHistorial.editarMotivo.value,
         formEditarHistorial.editarDiagnostico.value,
         formEditarHistorial.editarTratamiento.value,
         formEditarHistorial.editarNota.value
@@ -167,9 +224,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         cargarHistoriales();
         $("#staticBackdrop").modal("hide");
       } else {
-        alert("Error al guardar el paciente");
+        alert("Error al guardar el historial");
       }
     });
+
+  $(".pacientes").on("change", async function () {
+    let idPaciente = $(this).val();
+    if (!idPaciente) return;
+
+    if (idPaciente !== "nuevo") {
+      document.querySelector(".nuevo-paciente").classList.add("d-none");
+      document.querySelector(".card").classList.remove("d-none");
+    } else {
+      document.querySelector(".nuevo-paciente").classList.remove("d-none");
+      document.querySelector(".card").classList.remove("d-none");
+    }
+  });
 
   await cargarPacientes();
   await cargarHistoriales();

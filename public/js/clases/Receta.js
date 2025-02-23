@@ -84,4 +84,17 @@ class Receta {
     );
     return await respuesta.json();
   }
+
+  async eliminar() {
+    const respuesta = await fetch(
+      "../../app/controladores/RecetaController.php?action=eliminar",
+      {
+        method: "POST",
+        body: JSON.stringify(this.id),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return await respuesta.json();
+  }
+
 }

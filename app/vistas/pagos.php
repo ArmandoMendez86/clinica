@@ -16,49 +16,48 @@ include_once "../incluir/auth.php";
 
 </head>
 
-<body class="p-5 w-100">
+<body class="p-1 w-100">
 
-<h1 class="fs-4 text-center">Gestión de Pagos</h1>
-
-    <div class="table-responsive">
-        <table class="table tabPagos">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>nombre</th>
-                    <th>apellido</th>
-                    <th>diagnostico</th>
-                    <th>tratamiento</th>
-                    <th>notas</th>
-                    <th>monto</th>
-                    <th>fecha pago</th>
-                    <th>metodo pago</th>
-                </tr>
-            </thead>
-            <tbody id="listaPagos"></tbody>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+    <div class="d-flex h-100 align-items-center">
+        <div class="offcanvasmenu p-2"><?php include_once "../incluir/offcanvas.php"  ?></div>
+        <div class="table-responsive flex-grow-1">
+            <h1 class="fs-4 text-center">Gestión de Pagos</h1>
+            <div class="table-responsive">
+                <table class="table tabPagos">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>nombre</th>
+                            <th>Motivo</th>
+                            <th>tratamiento</th>
+                            <th>notas</th>
+                            <th>monto</th>
+                            <th>fecha pago</th>
+                            <th>metodo pago</th>
+                            <th>acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaPagos"></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="boton-logout"><?php include_once "../incluir/logout.php"  ?></div>
+        </div>
     </div>
 
 
-
-
-
-    <div class="boton-logout"><?php include_once "../incluir/logout.php"  ?></div>
-    <div class="offcanvasmenu"><?php include_once "../incluir/offcanvas.php"  ?></div>
-    <div class="boton-sidebar"><?php include_once "../incluir/sidebar.php"  ?></div>
 
 
     <script src="../../public/js/lib/jquery37.js" defer></script>

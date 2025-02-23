@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${medico.correo}</td>
         <td>${medico.telefono}</td>
         <td>${medico.especialidad}</td>
-        <td>
+        <td class="d-flex justify-content-center gap-2">
           <button id='editarMedico' type="button" class='btn btn-warning' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             <i class='fa fa-pencil'></i>
           </button>

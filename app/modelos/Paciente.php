@@ -16,18 +16,19 @@ class Paciente
         return $this->db->query($query)->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function agregar($id, $nombre, $apellido, $telefono, $email, $direccion, $fecha_cumple)
+    public function agregar($id, $nombre, $telefono, $email, $direccion, $fecha_cumple, $ocupacion, $enfermedades_c, $antecedentes_p, $alergias, $medicacion)
     {
-        $query = "INSERT INTO pacientes (id, nombre, apellido, telefono, email, direccion, fecha_cumple) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO pacientes (id, nombre, telefono, email, direccion, fecha_cumple, ocupacion, enfermedades_c, antecedentes_p, alergias, medicacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($query);
-        return $stmt->execute([$id, $nombre, $apellido, $telefono, $email, $direccion, $fecha_cumple]);
+        $stmt->execute([$id, $nombre, $telefono, $email, $direccion, $fecha_cumple, $ocupacion, $enfermedades_c, $antecedentes_p, $alergias, $medicacion]);
+        return $this->db->lastInsertId();
     }
 
-    public function editar($id, $nombre, $apellido, $telefono, $email, $direccion, $fecha_cumple)
+    public function editar($id, $nombre, $telefono, $email, $direccion, $fecha_cumple, $ocupacion, $enfermedades_c, $antecedentes_p, $alergias, $medicacion)
     {
-        $query = "UPDATE pacientes SET nombre = ?, apellido = ?, telefono = ?, email = ?, direccion = ?, fecha_cumple = ? WHERE id = ?";
+        $query = "UPDATE pacientes SET nombre = ?, telefono = ?, email = ?, direccion = ?, fecha_cumple = ?, ocupacion = ?, enfermedades_c = ?, antecedentes_p = ?, alergias = ?, medicacion = ? WHERE id = ?";
         $stmt = $this->db->prepare($query);
-        return $stmt->execute([$nombre, $apellido, $telefono, $email, $direccion, $fecha_cumple, $id]);
+        return $stmt->execute([$nombre, $telefono, $email, $direccion, $fecha_cumple, $ocupacion, $enfermedades_c, $antecedentes_p, $alergias, $medicacion, $id]);
     }
 
     public function eliminar($id)
